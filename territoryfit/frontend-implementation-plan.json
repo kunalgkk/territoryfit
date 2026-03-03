@@ -1,0 +1,676 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "FitZone Conquest - Territory-Based Fitness Tracking Multiplayer Game Frontend",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Implement Internet Identity authentication with Guest Mode and profile dashboard UI",
+      "acceptanceCriteria": [
+        "Guest users can access the app immediately with a temporary session and limited feature set",
+        "Internet Identity login creates a persistent account stored in the backend",
+        "Profile dashboard displays user name, level, XP, total distance, and territories owned",
+        "Authentication state persists across page reloads"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/auth/LoginButton.tsx",
+          "operation": "create",
+          "description": "Create login/logout button component using the authorization component. Use useInternetIdentity hook for authentication state management. Handle login, logout, and loading states. Clear query cache on logout using queryClient.clear()."
+        },
+        {
+          "path": "frontend/src/components/auth/GuestModePrompt.tsx",
+          "operation": "create",
+          "description": "Create guest mode prompt component that allows immediate app access with limited features. Display upgrade prompt with Internet Identity login option. Show feature comparison: guest vs authenticated."
+        },
+        {
+          "path": "frontend/src/components/profile/ProfileDashboard.tsx",
+          "operation": "create",
+          "description": "Create profile dashboard component displaying username (from authorization component's UserProfile), avatar placeholder, level, XP bar, total distance, calories burned, and territories owned count. Fetch data using backend interface methods: getFitnessProfile, getTotalUserStats, getUserOwnedZones."
+        },
+        {
+          "path": "frontend/src/hooks/useGetCallerUserProfile.ts",
+          "operation": "create",
+          "description": "Create hook for fetching current user profile using the authorization component pattern. Use actor.getCallerUserProfile() from backend interface. Implement proper loading state handling to prevent profile setup modal flash. Return isLoading that accounts for actorFetching state."
+        },
+        {
+          "path": "frontend/src/components/auth/ProfileSetupModal.tsx",
+          "operation": "create",
+          "description": "Create profile setup modal using the authorization component. Show only when isAuthenticated && !profileLoading && isFetched && userProfile === null. Collect user's display name. Call saveCallerUserProfile from backend. Verify the authorization component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire authentication flow: check authentication state, conditionally render GuestModePrompt or authenticated app content, integrate ProfileSetupModal for first-time users, add LoginButton to header/navigation."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Build user onboarding flow UI collecting fitness profile data",
+      "acceptanceCriteria": [
+        "Onboarding form collects all required profile fields before first use",
+        "Profile data is stored in the backend actor per user principal",
+        "Calorie calculations reference weight and age from profile",
+        "Onboarding can be skipped by guest users but prompted on login"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/onboarding/OnboardingFlow.tsx",
+          "operation": "create",
+          "description": "Create multi-step onboarding component collecting full name, age, gender, height (cm), weight (kg), and primary fitness goal (dropdown: weight loss, muscle gain, endurance, general fitness). Use form validation. Submit to backend using registerFitnessProfile from backend interface. Show skip option for guest users."
+        },
+        {
+          "path": "frontend/src/hooks/useFitnessProfile.ts",
+          "operation": "create",
+          "description": "Create hook for fetching and managing fitness profile. Use getFitnessProfile from backend interface. Return profile data, loading state, and mutation for updating profile."
+        },
+        {
+          "path": "frontend/src/components/onboarding/ProfileCompletionGate.tsx",
+          "operation": "create",
+          "description": "Create gate component that checks if authenticated user has completed fitness profile. If not, render OnboardingFlow modal. Allow guest users to bypass. Wire into App.tsx after authentication check."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Implement fitness activity tracking UI with manual workout session input",
+      "acceptanceCriteria": [
+        "User can start and stop a workout session selecting activity type",
+        "Session summary shows duration, distance, pace, and calories burned",
+        "All completed sessions are stored in the backend and retrievable per user",
+        "Activity history page shows past sessions grouped by day/week/month"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/tracking/WorkoutRecorder.tsx",
+          "operation": "create",
+          "description": "Create workout recording component with activity type selector (running, walking, jogging, cycling, outdoor workout), duration timer display, manual distance input field (km), and start/stop controls. Calculate and display real-time pace (min/km). Show estimated calories based on duration and distance. On stop, submit session using recordWorkoutSession from backend interface."
+        },
+        {
+          "path": "frontend/src/components/tracking/SessionSummary.tsx",
+          "operation": "create",
+          "description": "Create session summary card component displaying completed workout details: activity type icon, duration (mm:ss format), distance (km), pace (min/km), calories burned, and timestamp. Include visual celebration animation on completion."
+        },
+        {
+          "path": "frontend/src/pages/ActivityHistory.tsx",
+          "operation": "create",
+          "description": "Create activity history page fetching workout sessions using getWorkoutSessions from backend interface. Group sessions by day/week/month tabs. Display list of SessionSummary cards with infinite scroll or pagination. Show empty state for no activities."
+        },
+        {
+          "path": "frontend/src/hooks/useWorkoutSessions.ts",
+          "operation": "create",
+          "description": "Create hook for fetching workout sessions using getWorkoutSessions from backend interface. Support filtering by user principal. Return sessions array, loading state, and refetch function."
+        },
+        {
+          "path": "frontend/src/routes/activity-history.tsx",
+          "operation": "create",
+          "description": "Create route file for /activity-history path using TanStack Router. Export route component rendering ActivityHistory page with authentication guard."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Build smart health analytics dashboard UI with progress charts and goal tracking",
+      "acceptanceCriteria": [
+        "Analytics page shows line/bar charts for distance and calories over the last 7 and 30 days",
+        "Personal bests (longest run, fastest pace) are highlighted",
+        "Goal progress bar shows daily distance/calorie target completion",
+        "Trend indicator compares this week vs last week for key metrics"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Analytics.tsx",
+          "operation": "create",
+          "description": "Create analytics dashboard page displaying progress charts using a chart library (recharts or similar). Fetch data using getAnalyticsSummary and getWorkoutSessions from backend interface. Show 7-day and 30-day tabs. Display distance and calorie charts as line/bar graphs. Highlight personal bests section. Show goal progress bars with percentage completion. Display trend indicators (up/down arrows with percentage change) comparing current week vs previous week."
+        },
+        {
+          "path": "frontend/src/components/analytics/ProgressChart.tsx",
+          "operation": "create",
+          "description": "Create reusable chart component accepting data series (dates, values), metric type (distance/calories), and time range (7/30 days). Render responsive line or bar chart with black-and-white theme. Highlight data points on hover."
+        },
+        {
+          "path": "frontend/src/components/analytics/PersonalBests.tsx",
+          "operation": "create",
+          "description": "Create personal bests display component calculating and showing: longest distance, fastest pace, most calories burned, longest duration. Derive from workout sessions data. Display in card grid with highlight animations."
+        },
+        {
+          "path": "frontend/src/components/analytics/GoalTracker.tsx",
+          "operation": "create",
+          "description": "Create goal tracking component with daily distance and calorie targets. Show progress bars with current vs target. Display percentage completion and remaining amount. Use client-side state for goal values (hardcoded defaults or localStorage)."
+        },
+        {
+          "path": "frontend/src/routes/analytics.tsx",
+          "operation": "create",
+          "description": "Create route file for /analytics path using TanStack Router. Export route component rendering Analytics page with authentication guard."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Create AI fitness coaching panel UI displaying rule-based recommendations",
+      "acceptanceCriteria": [
+        "AI Coach tab displays a personalized workout routine based on user goal and recent activity",
+        "Diet plan section shows meal suggestions tailored to estimated calorie needs",
+        "Hydration reminder and recovery tip are shown based on last activity duration",
+        "Recommendations update when user profile or recent activity data changes"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/AICoach.tsx",
+          "operation": "create",
+          "description": "Create AI coaching page displaying personalized recommendations. Fetch user fitness profile and recent workout sessions. Use client-side rule-based logic to generate: workout routine cards based on goal (weight loss = HIIT, muscle gain = strength training, endurance = long runs), meal suggestion cards based on estimated daily calorie needs (calculated from profile weight/age/goal), hydration reminder based on last workout duration, and recovery tips. Display as styled text cards in sections. Gate this feature for Pro/Elite subscription tiers only; show upgrade prompt for Free/Premium users."
+        },
+        {
+          "path": "frontend/src/components/coach/WorkoutRoutineCard.tsx",
+          "operation": "create",
+          "description": "Create workout routine recommendation card component. Accept goal type and recent activity as props. Display rule-based routine: exercise name, sets/reps or duration, and brief instruction. Use minimalist card design with black-and-white styling."
+        },
+        {
+          "path": "frontend/src/components/coach/MealPlanCard.tsx",
+          "operation": "create",
+          "description": "Create meal plan recommendation card component. Calculate daily calorie target from user weight, age, and goal. Display breakfast/lunch/dinner meal suggestions as text templates. Include macro breakdown estimate (protein/carbs/fats percentages)."
+        },
+        {
+          "path": "frontend/src/components/coach/HydrationReminder.tsx",
+          "operation": "create",
+          "description": "Create hydration reminder component displaying recommended water intake based on last workout duration. Use rule: 500ml per 30min of activity. Show visual water glass icon with fill level."
+        },
+        {
+          "path": "frontend/src/routes/ai-coach.tsx",
+          "operation": "create",
+          "description": "Create route file for /ai-coach path using TanStack Router. Export route component rendering AICoach page with authentication and subscription tier guard."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Implement territory game UI for zone selection and ownership display",
+      "acceptanceCriteria": [
+        "A predefined set of territory zones exists in the backend",
+        "Users can log a zone pass when completing a workout in that zone",
+        "Zone ownership is assigned to the user with the highest cumulative pass count",
+        "Each user has a unique color; owned zones display in that color on the map",
+        "Takeover logic: a challenger surpassing the current owner's count immediately gains ownership"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/game/ZoneSelector.tsx",
+          "operation": "create",
+          "description": "Create zone selector component for workout recording. Fetch available zones using listZones from backend interface. Display as dropdown or searchable list. Allow user to select zone when starting a workout. Pass selected zone to WorkoutRecorder component."
+        },
+        {
+          "path": "frontend/src/components/game/ZoneOwnershipCard.tsx",
+          "operation": "create",
+          "description": "Create zone ownership detail card showing zone name, current owner name (fetch from user profile), owner's pass count, and top 5 challengers with their counts. Fetch data using getZonePassCounts from backend interface. Display owner in their assigned color."
+        },
+        {
+          "path": "frontend/src/hooks/useTerritoryZones.ts",
+          "operation": "create",
+          "description": "Create hook for fetching all territory zones and ownership data using getAllTerritoryZones from backend interface. Return zones map, loading state, and refetch function. Implement polling with React Query refetchInterval for live updates (every 10 seconds)."
+        },
+        {
+          "path": "frontend/src/components/tracking/WorkoutRecorder.tsx",
+          "operation": "modify",
+          "description": "Integrate ZoneSelector into WorkoutRecorder. Include selected zone in workout session submission. Pass zone field to recordWorkoutSession in backend interface."
+        }
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "summary": "Implement live territory map view using SVG grid with ownership colors and animations",
+      "acceptanceCriteria": [
+        "Map page renders a grid of territory zones with ownership colors",
+        "User's currently selected zone is highlighted with a border",
+        "Zone ownership changes animate with a smooth color transition",
+        "Contested zones (multiple active challengers) display a visual conflict indicator",
+        "Map is responsive and performant on mobile screen sizes"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/TerritoryMap.tsx",
+          "operation": "create",
+          "description": "Create territory map page as primary game view. Fetch all zones using useTerritoryZones hook with polling. Render TerritoryMapGrid component. Display zone ownership legend. Show user stats panel (owned zones count, current rank). Make map full-viewport with overlaid UI panels."
+        },
+        {
+          "path": "frontend/src/components/game/TerritoryMapGrid.tsx",
+          "operation": "create",
+          "description": "Create SVG-based territory grid component. Map zones to hexagonal or square cells in a grid layout. Assign each user a unique color from a predefined palette (use principal hash for consistent color assignment). Fill each cell with owner's color. Highlight user's selected zone with white border. Animate color transitions using CSS transitions on ownership change. Mark contested zones (multiple users with pass counts within 20% of leader) with pulsing border animation. Make responsive: scale grid to fit viewport, maintain aspect ratio."
+        },
+        {
+          "path": "frontend/src/components/game/ZoneLegend.tsx",
+          "operation": "create",
+          "description": "Create zone ownership legend component showing color-to-user mapping for visible zones. Display current user's color prominently. List top 5 territory owners with their colors and zone counts."
+        },
+        {
+          "path": "frontend/src/components/game/TerritoryStatsPanel.tsx",
+          "operation": "create",
+          "description": "Create stats overlay panel for territory map showing user's total owned zones, global rank (from leaderboard data), and live contest notifications (when a user's zone is being challenged). Use semi-transparent black background with white text."
+        },
+        {
+          "path": "frontend/src/routes/territory-map.tsx",
+          "operation": "create",
+          "description": "Create route file for /territory-map path using TanStack Router. Export route component rendering TerritoryMap page with authentication guard."
+        },
+        {
+          "path": "frontend/src/utils/colorAssignment.ts",
+          "operation": "create",
+          "description": "Create utility module for assigning consistent colors to user principals. Hash principal string to index into a predefined color palette (vibrant hues: red, blue, green, purple, orange, yellow, cyan, magenta). Export getUserColor(principal: Principal) function."
+        }
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "summary": "Build global and regional leaderboards UI with multiple ranking metrics",
+      "acceptanceCriteria": [
+        "Leaderboard page shows top 100 users sorted by selected metric",
+        "Tabs allow switching between Territory, Distance, Calories, and Takeovers rankings",
+        "Global and region-filtered views are available",
+        "Current user's rank is highlighted even if outside top 100",
+        "Leaderboard data is fetched from the backend actor"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Leaderboard.tsx",
+          "operation": "create",
+          "description": "Create leaderboard page with tabs for Territory (zones owned), Distance (total km), Calories (total burned), and Takeovers (successful captures). Fetch data by aggregating from backend: getUserOwnedZones and getTotalUserStats for all users (note: backend may need pagination or top-N query). Display top 100 users in ranked list. Highlight current user's row even if outside top 100. Show global/region filter toggle (region stored in user profile if available). Implement polling for live rank updates."
+        },
+        {
+          "path": "frontend/src/components/leaderboard/LeaderboardTable.tsx",
+          "operation": "create",
+          "description": "Create leaderboard table component displaying rank, user name (from profile), metric value, and trend indicator (up/down/same vs last week). Use virtualized list for performance with 100+ rows. Highlight current user row with accent color. Display user avatar placeholder and level badge."
+        },
+        {
+          "path": "frontend/src/hooks/useLeaderboardData.ts",
+          "operation": "create",
+          "description": "Create hook for fetching and computing leaderboard rankings. Aggregate user stats from backend interface methods. Sort by selected metric. Return ranked user list, current user rank, and refetch function. Implement React Query polling (refetchInterval: 30s)."
+        },
+        {
+          "path": "frontend/src/routes/leaderboard.tsx",
+          "operation": "create",
+          "description": "Create route file for /leaderboard path using TanStack Router. Export route component rendering Leaderboard page with authentication guard."
+        }
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "summary": "Implement gamification UI for XP, levels, badges, and challenges",
+      "acceptanceCriteria": [
+        "Completing a workout awards XP displayed in a toast notification",
+        "User profile shows current level, XP bar, and XP needed for next level",
+        "Badge collection page displays earned and locked badges with unlock criteria",
+        "Daily challenge (e.g., log 5km today) shows progress and bonus XP on completion",
+        "Login streak is tracked and rewarded with bonus XP for consecutive days"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/gamification/XPToast.tsx",
+          "operation": "create",
+          "description": "Create XP gain toast notification component. Show animated +XP message on workout completion. Trigger from WorkoutRecorder after successful session submission. Display level-up celebration overlay if user crosses level threshold. Use client-side XP calculation based on duration and distance (10 XP per km, 5 XP per 10 minutes)."
+        },
+        {
+          "path": "frontend/src/components/gamification/LevelProgressBar.tsx",
+          "operation": "create",
+          "description": "Create level progress bar component for profile dashboard. Calculate level from total XP using formula: level = floor(sqrt(totalXP / 100)). Display current level, XP bar (progress to next level), and XP needed. Use animated fill transition."
+        },
+        {
+          "path": "frontend/src/pages/Badges.tsx",
+          "operation": "create",
+          "description": "Create badge collection page displaying earned and locked badges in a grid. Define badge catalog with unlock criteria: First Capture (capture any zone), Territory King (own 10 zones), Marathon Runner (log 100km total), Week Warrior (7-day login streak), Speed Demon (pace under 5 min/km), etc. Check unlock criteria against user stats. Show badge icon, name, description, and unlock date for earned badges. Show locked icon and criteria for unearned badges."
+        },
+        {
+          "path": "frontend/src/components/gamification/DailyChallengeCard.tsx",
+          "operation": "create",
+          "description": "Create daily challenge card component. Define daily challenge types: distance goal (5km), calorie goal (500 cal), workout count (2 sessions), zone capture (1 new zone). Randomly select or cycle through challenges. Show challenge description, progress bar, and bonus XP reward. Calculate progress from today's workout sessions. Award bonus XP on completion (show celebration animation)."
+        },
+        {
+          "path": "frontend/src/components/gamification/LoginStreakBadge.tsx",
+          "operation": "create",
+          "description": "Create login streak tracker component. Use localStorage to track consecutive login days (store last login date, compare on mount). Display current streak count and flame icon. Award bonus XP for streaks: 10 XP at 3 days, 25 XP at 7 days, 50 XP at 30 days. Show streak milestone celebrations."
+        },
+        {
+          "path": "frontend/src/routes/badges.tsx",
+          "operation": "create",
+          "description": "Create route file for /badges path using TanStack Router. Export route component rendering Badges page with authentication guard."
+        },
+        {
+          "path": "frontend/src/utils/gamification.ts",
+          "operation": "create",
+          "description": "Create gamification utilities module. Export functions: calculateXP(session: WorkoutSession), getLevelFromXP(xp: number), getXPForNextLevel(currentLevel: number), checkBadgeUnlock(badgeId: string, userStats: any), calculateDailyChallengeProgress(challengeType: string, todaySessions: WorkoutSession[])."
+        },
+        {
+          "path": "frontend/src/components/profile/ProfileDashboard.tsx",
+          "operation": "modify",
+          "description": "Integrate LevelProgressBar into ProfileDashboard. Display current level, XP bar, and badge count summary. Calculate total XP from all workout sessions."
+        }
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "summary": "Implement social features UI: friends system, activity feed, and team formation",
+      "acceptanceCriteria": [
+        "Users can search for other users by username and send friend requests",
+        "Activity feed on home page shows last 20 activities from friends",
+        "Users can create or join a team; team page shows all members and aggregate territory count",
+        "Team territory battles aggregate all team members' zone passes for a zone",
+        "Activity items can be shared as a summary text (copy to clipboard)"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Friends.tsx",
+          "operation": "create",
+          "description": "Create friends management page with user search input, friend request actions, and friend list display. Use client-side state (localStorage) for friend connections until backend support is added. Display friend profiles with stats: level, zones owned, total distance. Show pending requests section."
+        },
+        {
+          "path": "frontend/src/components/social/ActivityFeed.tsx",
+          "operation": "create",
+          "description": "Create activity feed component displaying recent workout sessions from friends. Fetch sessions for each friend using getWorkoutSessions from backend interface. Show last 20 activities in chronological order. Each feed item displays: user name, activity type, distance, duration, zone captured (if any), and timestamp. Include share button to copy activity summary to clipboard."
+        },
+        {
+          "path": "frontend/src/components/social/ShareActivityButton.tsx",
+          "operation": "create",
+          "description": "Create share activity button component. Generate shareable text summary: '[UserName] just logged a [distance]km [activity] in [zone] and earned [XP] XP! #FitZoneConquest'. Copy to clipboard using navigator.clipboard. Show success toast."
+        },
+        {
+          "path": "frontend/src/pages/Teams.tsx",
+          "operation": "create",
+          "description": "Create team management page allowing users to create or join a team. Use client-side state (localStorage) for team data. Display team page with: team name, member list (with avatars and levels), aggregate territory count (sum of all members' owned zones), team leaderboard rank. Show team activity feed (recent workouts from team members)."
+        },
+        {
+          "path": "frontend/src/components/social/TeamCard.tsx",
+          "operation": "create",
+          "description": "Create team summary card component displaying team name, member count, total territories owned, and team rank. Show member avatars in a row. Include join/leave button."
+        },
+        {
+          "path": "frontend/src/routes/friends.tsx",
+          "operation": "create",
+          "description": "Create route file for /friends path using TanStack Router. Export route component rendering Friends page with authentication guard."
+        },
+        {
+          "path": "frontend/src/routes/teams.tsx",
+          "operation": "create",
+          "description": "Create route file for /teams path using TanStack Router. Export route component rendering Teams page with authentication guard."
+        },
+        {
+          "path": "frontend/src/pages/Home.tsx",
+          "operation": "create",
+          "description": "Create home page displaying ActivityFeed component with friends' recent activities, DailyChallengeCard, quick stats summary (today's distance/calories), and quick-start workout button. Make this the default authenticated landing page."
+        },
+        {
+          "path": "frontend/src/routes/home.tsx",
+          "operation": "create",
+          "description": "Create route file for / (home) path using TanStack Router. Export route component rendering Home page with authentication guard."
+        }
+      ]
+    },
+    {
+      "id": "REQ-12",
+      "summary": "Build subscription tier UI with feature gating and upgrade prompts",
+      "acceptanceCriteria": [
+        "Subscription tier is stored per user in backend and returned with profile",
+        "Free users see a banner ad placeholder in the UI",
+        "AI Coach feature is locked for Free and Premium tiers with an upgrade prompt",
+        "Elite users' zone pass increments are counted as 2x in takeover logic",
+        "Subscription management page shows current tier, benefits, and upgrade options"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Subscription.tsx",
+          "operation": "create",
+          "description": "Create subscription management page displaying four tiers: Free (ad-supported, basic features), Premium (no ads, all core features), Pro (Premium + advanced analytics + AI coach), Elite (Pro + territory power boost: 2x zone passes). Show current tier with checkmark. Display feature comparison table. Include upgrade buttons for higher tiers (link to payment flow). Store tier in user profile or separate field in backend."
+        },
+        {
+          "path": "frontend/src/components/subscription/TierBadge.tsx",
+          "operation": "create",
+          "description": "Create subscription tier badge component. Display tier name (Free/Premium/Pro/Elite) with color-coded icon. Show in profile dashboard and settings."
+        },
+        {
+          "path": "frontend/src/components/subscription/UpgradePrompt.tsx",
+          "operation": "create",
+          "description": "Create upgrade prompt modal component. Show when Free/Premium user attempts to access locked features (AI Coach, Elite power boost). Display feature benefits and upgrade CTA button linking to Subscription page."
+        },
+        {
+          "path": "frontend/src/components/subscription/AdBanner.tsx",
+          "operation": "create",
+          "description": "Create ad banner placeholder component for Free tier users. Display placeholder banner (e.g., 'Advertisement' text in gray box) at top or bottom of pages. Hide for Premium/Pro/Elite users. Check tier from user profile."
+        },
+        {
+          "path": "frontend/src/routes/subscription.tsx",
+          "operation": "create",
+          "description": "Create route file for /subscription path using TanStack Router. Export route component rendering Subscription page with authentication guard."
+        },
+        {
+          "path": "frontend/src/utils/subscriptionGating.ts",
+          "operation": "create",
+          "description": "Create subscription feature gating utilities. Export functions: hasFeatureAccess(tier: string, feature: string), getTierLevel(tier: string), requiresUpgrade(currentTier: string, feature: string). Define feature-to-tier mappings."
+        },
+        {
+          "path": "frontend/src/pages/AICoach.tsx",
+          "operation": "modify",
+          "description": "Add subscription tier check to AICoach page. If user tier is Free or Premium, show UpgradePrompt modal instead of coach content. Verify tier using utility function."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Conditionally render AdBanner component for Free tier users. Check user tier from profile and display banner at bottom of viewport for Free users only."
+        }
+      ]
+    },
+    {
+      "id": "REQ-13",
+      "summary": "Implement in-app purchase store UI with Stripe payment integration",
+      "acceptanceCriteria": [
+        "Store page lists all purchasable items with descriptions and prices",
+        "Purchase flow integrates Stripe Checkout",
+        "Purchased items appear in user's inventory",
+        "Activating a booster sets a timed expiry stored in backend",
+        "Active boosts are visible on the profile page with remaining time"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Store.tsx",
+          "operation": "create",
+          "description": "Create in-app purchase store page displaying virtual items: Territory Boosters (2x zone pass multiplier for 24h, $4.99), XP Multipliers (2x XP for 24h, $2.99), Cosmetic Skins (player color themes, $1.99 each), Power-ups (zone defense for 12h, $3.99). Show item cards with icon, name, description, and price. Include purchase button triggering Stripe checkout. Use the stripe component following its usage instructions. Verify the stripe component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useCreateCheckoutSession.ts",
+          "operation": "create",
+          "description": "Create checkout session hook using the stripe component pattern. Use actor.createCheckoutSession(items, successUrl, cancelUrl) from backend interface. Parse JSON response to extract session.url. Validate that session.url is non-empty before redirecting. Return mutation with loading/error states."
+        },
+        {
+          "path": "frontend/src/components/store/StoreItemCard.tsx",
+          "operation": "create",
+          "description": "Create store item card component displaying item icon, name, description, price, and purchase button. On purchase click, trigger useCreateCheckoutSession mutation with ShoppingItem data. Redirect to session.url using window.location.href (not router navigation) after successful session creation."
+        },
+        {
+          "path": "frontend/src/pages/PaymentSuccess.tsx",
+          "operation": "create",
+          "description": "Create payment success page using the stripe component pattern. Display success message, purchased item summary, and return to store button. Show confetti animation on mount."
+        },
+        {
+          "path": "frontend/src/pages/PaymentFailure.tsx",
+          "operation": "create",
+          "description": "Create payment failure page using the stripe component pattern. Display failure message, reason (if available), retry purchase button, and return to store button."
+        },
+        {
+          "path": "frontend/src/components/store/StripeConfigSetup.tsx",
+          "operation": "create",
+          "description": "Create Stripe configuration setup component for admins using the stripe component pattern. Check isStripeConfigured() from backend. If not configured, show admin panel prompting for Stripe secret key and allowed countries list. Submit using setStripeConfiguration() from backend. Do not show setup when already configured. Verify the stripe component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/Inventory.tsx",
+          "operation": "create",
+          "description": "Create inventory page displaying owned items and active boosts. Store purchased items in client-side state (localStorage with purchase timestamp). Show item list with quantity and activation status. For boosters, display activate button and expiry countdown timer. Track active boost expiry in localStorage."
+        },
+        {
+          "path": "frontend/src/routes/store.tsx",
+          "operation": "create",
+          "description": "Create route file for /store path using TanStack Router. Export route component rendering Store page with authentication guard."
+        },
+        {
+          "path": "frontend/src/routes/payment-success.tsx",
+          "operation": "create",
+          "description": "Create route file for /payment-success path using TanStack Router as required by the stripe component. Export route component rendering PaymentSuccess page."
+        },
+        {
+          "path": "frontend/src/routes/payment-failure.tsx",
+          "operation": "create",
+          "description": "Create route file for /payment-failure path using TanStack Router as required by the stripe component. Export route component rendering PaymentFailure page."
+        },
+        {
+          "path": "frontend/src/routes/inventory.tsx",
+          "operation": "create",
+          "description": "Create route file for /inventory path using TanStack Router. Export route component rendering Inventory page with authentication guard."
+        },
+        {
+          "path": "frontend/src/components/profile/ProfileDashboard.tsx",
+          "operation": "modify",
+          "description": "Add active boosts section to ProfileDashboard. Display active Territory Booster or XP Multiplier with remaining time countdown. Fetch from localStorage. Show visual indicator (icon + timer)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "summary": "Build admin control panel UI with user management, territory monitoring, and feature flags",
+      "acceptanceCriteria": [
+        "Admin panel is only accessible to whitelisted admin principal IDs",
+        "User management table lists all users with ban and stat-reset actions",
+        "Territory monitor shows all zones with current owner and contest status",
+        "Feature flag toggles immediately gate corresponding features for all users",
+        "Revenue dashboard shows total transaction count and estimated revenue",
+        "Admin can manually override a user's subscription tier"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Admin.tsx",
+          "operation": "create",
+          "description": "Create admin control panel page accessible only to admin principals. Check isCallerAdmin() from backend interface. Display tabs: User Management, Territory Monitor, Feature Flags, Revenue Dashboard. Use the authorization component's admin guard pattern. Verify the authorization component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/admin/UserManagementTable.tsx",
+          "operation": "create",
+          "description": "Create user management table component. Display all users with: principal ID, name, level, territories owned, subscription tier, and actions (ban, reset stats, override tier). Fetch user list by aggregating data from backend methods. Implement ban/reset actions (use client-side state until backend support added). Show pagination for large user lists."
+        },
+        {
+          "path": "frontend/src/components/admin/TerritoryMonitor.tsx",
+          "operation": "create",
+          "description": "Create territory monitoring component. Display all zones with current owner, owner pass count, top 3 challengers, and dispute status (contested if challengers within 20% of owner). Fetch using getAllTerritoryZones from backend interface. Show sortable table and search filter."
+        },
+        {
+          "path": "frontend/src/components/admin/FeatureFlags.tsx",
+          "operation": "create",
+          "description": "Create feature flags control component. Display toggle switches for: AI Coach enabled, Team Battles enabled, IAP Store enabled. Store flags in localStorage and use React Context to propagate to all components. Toggling flag immediately gates feature access across app."
+        },
+        {
+          "path": "frontend/src/components/admin/RevenueDashboard.tsx",
+          "operation": "create",
+          "description": "Create revenue tracking dashboard component. Display total transaction count and estimated revenue from purchases. Use client-side state (localStorage) to track completed purchases until backend support added. Show revenue chart over time and top-selling items."
+        },
+        {
+          "path": "frontend/src/routes/admin.tsx",
+          "operation": "create",
+          "description": "Create route file for /admin path using TanStack Router. Export route component rendering Admin page with admin-only authentication guard using isCallerAdmin() check."
+        },
+        {
+          "path": "frontend/src/contexts/FeatureFlagsContext.tsx",
+          "operation": "create",
+          "description": "Create feature flags React context provider. Store flags in state (synced with localStorage). Export useFeatureFlags hook. Provide boolean values for each flag: aiCoachEnabled, teamBattlesEnabled, iapStoreEnabled. Wrap App with provider."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wrap app content with FeatureFlagsContext provider. Gate AI Coach route, Teams route, and Store route based on feature flags."
+        },
+        {
+          "path": "frontend/src/components/admin/StripeConfigSetup.tsx",
+          "operation": "modify",
+          "description": "Wire StripeConfigSetup component into Admin page tabs. Show Stripe configuration panel in Revenue Dashboard tab."
+        }
+      ]
+    },
+    {
+      "id": "REQ-15",
+      "summary": "Apply minimalist black-and-white theme with gamified overlays and mobile-first responsive design",
+      "acceptanceCriteria": [
+        "Global color palette is black (#0a0a0a), white (#f5f5f5), and neutral grays with player colors as sole accents",
+        "Map view occupies the primary viewport with overlaid UI panels",
+        "XP gain, level-up, and zone capture events trigger visible animation overlays",
+        "All pages are fully usable on 375px mobile screen width",
+        "Navigation uses a bottom tab bar on mobile and sidebar on desktop"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Define global black-and-white color palette in CSS variables: --color-bg-primary: #0a0a0a, --color-bg-secondary: #1a1a1a, --color-text-primary: #f5f5f5, --color-text-secondary: #a0a0a0, --color-border: #333333, --color-accent: #ffffff. Set default body background to black, text to white. Remove default margins/padding."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Extend Tailwind theme with black-and-white color palette matching CSS variables. Define custom colors: primary (black shades), secondary (white/gray shades), accent (player colors). Configure responsive breakpoints for mobile-first design (sm: 375px, md: 768px, lg: 1024px). Add custom animations: fadeIn, slideUp, pulse, colorTransition."
+        },
+        {
+          "path": "frontend/src/components/layout/Navigation.tsx",
+          "operation": "create",
+          "description": "Create responsive navigation component. On mobile (< 768px): render bottom tab bar with icons for Home, Map, Activity, Profile, More. On desktop: render sidebar with text labels. Use black background, white icons/text. Highlight active route with white underline or border."
+        },
+        {
+          "path": "frontend/src/components/layout/AppLayout.tsx",
+          "operation": "create",
+          "description": "Create app layout wrapper component. Structure: Navigation (bottom/sidebar), main content area, optional overlays. For map view, use full-viewport layout with floating UI panels. For other pages, use standard content container with max-width. Include XP toast container and modal portal."
+        },
+        {
+          "path": "frontend/src/components/overlays/XPGainOverlay.tsx",
+          "operation": "create",
+          "description": "Create XP gain animation overlay component. Display large +XP text with fade-in and slide-up animation. Auto-dismiss after 2 seconds. Position at center of viewport. Use white text with subtle glow effect."
+        },
+        {
+          "path": "frontend/src/components/overlays/LevelUpOverlay.tsx",
+          "operation": "create",
+          "description": "Create level-up celebration overlay component. Display full-screen animated celebration: 'LEVEL UP!' text, level number, particle effects (confetti or sparkles), and XP badge. Auto-dismiss after 3 seconds or on tap. Use high z-index."
+        },
+        {
+          "path": "frontend/src/components/overlays/ZoneCaptureOverlay.tsx",
+          "operation": "create",
+          "description": "Create zone capture animation overlay component. Display zone name, 'CAPTURED!' text, and color-fill animation. Show ownership transfer (old owner -> new owner) with color transition. Auto-dismiss after 2 seconds."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wrap all routes with AppLayout component. Include overlay components (XPGainOverlay, LevelUpOverlay, ZoneCaptureOverlay) at top level. Trigger overlays via event system or global state (React Context or Zustand store)."
+        },
+        {
+          "path": "frontend/src/contexts/OverlayContext.tsx",
+          "operation": "create",
+          "description": "Create overlay management context for triggering gamification overlays. Export functions: showXPGain(xp: number), showLevelUp(level: number), showZoneCapture(zoneName: string, ownerColor: string). Store overlay state and handle auto-dismiss timers."
+        }
+      ]
+    },
+    {
+      "id": "REQ-16",
+      "summary": "Wire generated app icon and splash background image into the application",
+      "acceptanceCriteria": [
+        "App icon is rendered at the top of the login/splash screen",
+        "Splash background image fills the loading screen",
+        "Both assets are served from frontend/public/assets/generated"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/SplashScreen.tsx",
+          "operation": "create",
+          "description": "Create splash/loading screen component. Display app icon image from frontend/public/assets/generated/app-icon.dim_256x256.png at center. Use splash background image from frontend/public/assets/generated/splash-bg.dim_1200x800.png as full-screen background (background-image CSS, cover sizing). Show loading spinner or progress indicator below icon. Auto-transition to main app after authentication check completes."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Show SplashScreen component during initial app load and authentication state determination. Hide splash once identity is loaded and profile check completes. Use loading state from useInternetIdentity and useGetCallerUserProfile hooks."
+        },
+        {
+          "path": "frontend/src/components/auth/GuestModePrompt.tsx",
+          "operation": "modify",
+          "description": "Include app icon image from frontend/public/assets/generated/app-icon.dim_256x256.png in the guest mode prompt header for branding consistency."
+        }
+      ]
+    }
+  ]
+}

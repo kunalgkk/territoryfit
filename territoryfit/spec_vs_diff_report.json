@@ -1,0 +1,179 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-28T17:11:16.728Z",
+  "summary": "The diff adds 65 new files implementing many of the requested features across both frontend and backend. The truncated backend/main.mo covers fitness profiles, workout sessions, analytics, and territory zones. Frontend components cover analytics, auth, AI coach, gamification overlays, leaderboard, territory map, and subscription. However, due to heavy truncation (45 of 65 files omitted), many features cannot be fully verified. Several critical requirements show partial or missing implementation evidence.",
+  "missing_requirements": [
+    {
+      "id": "REQ-9",
+      "requirement": "Global and regional leaderboards with tabs for Territory, Distance, Calories, and Takeovers. Filterable by user-selected region tag. Store region tags on user profiles.",
+      "reason": "LeaderboardTable component is present but only renders generic entries. No evidence of region tag storage on profiles, region-filtered views, or backend leaderboard query functions returning top 100 with all four metrics. The backend main.mo truncation prevents full verification but no region tag field is visible in FitnessProfile type.",
+      "evidence": [
+        "frontend/src/components/leaderboard/LeaderboardTable.tsx",
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "requirement": "Social and community features: friends system (send/accept requests, view list), public activity feed from friends, team formation for group territory battles with aggregated zone passes.",
+      "reason": "No friend request, friend list, activity feed, or team formation components/pages are visible in the diff summary. While App.tsx references FriendsPage and TeamsPage imports, no implementation files for these are included in the shown diff.",
+      "evidence": [
+        "frontend/src/App.tsx"
+      ]
+    },
+    {
+      "id": "REQ-12",
+      "requirement": "Subscription tier system with four tiers (Free, Premium, Pro, Elite). Backend storage of tier per user, feature gating, Elite 2x zone pass logic, ad placeholder for Free users.",
+      "reason": "App.tsx reads subscriptionTier from localStorage rather than the backend, violating the AC that tier is stored per user in backend and returned with profile. No backend tier storage is visible in the shown backend types.",
+      "evidence": [
+        "frontend/src/App.tsx",
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-13",
+      "requirement": "In-app purchase store for virtual items (Territory Boosters, XP Multipliers, Cosmetic Skins, Power-ups) with Stripe Checkout integration, inventory storage, and timed boosts in backend.",
+      "reason": "While Stripe config and session status functions exist in main.mo, no store item types, inventory storage, timed boosts/expiry tracking, or purchase flow are visible in the shown backend code. StorePage and InventoryPage are referenced in App.tsx but their implementations are not shown.",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/App.tsx"
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "requirement": "Admin and SaaS control panel with user management (ban, reset stats), territory monitoring, subscription override, revenue tracking, feature flags, and XP/level tuning.",
+      "reason": "AdminPage is referenced in App.tsx but its implementation is not in the diff. The backend shows AccessControl/admin permission checks but no ban, reset-stats, feature flag toggles, revenue tracking, or XP tuning functions are visible in the truncated main.mo.",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/App.tsx"
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "requirement": "getZoneDetails(zoneId) returning current owner, owner count, and top 5 challengers; getUserTerritoryCount(userId) returning total zones owned.",
+      "reason": "The backend main.mo is truncated. The shown portion includes TerritoryZone types and updateTerritoryZone calls but getZoneDetails and getUserTerritoryCount functions are not visible in the truncated content.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "requirement": "Login streak tracked and rewarded with bonus XP for consecutive days stored in backend; badge collection with earned/locked badges stored in backend; weekly challenges with bonus XP.",
+      "reason": "LoginStreakBadge uses only localStorage for streak tracking, not backend storage. DailyChallengeCard is frontend-only. No backend badge storage or weekly challenge tracking is visible in main.mo.",
+      "evidence": [
+        "frontend/src/components/gamification/LoginStreakBadge.tsx",
+        "frontend/src/components/gamification/DailyChallengeCard.tsx",
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-16",
+      "requirement": "App icon (app-icon.dim_256x256.png) and splash background (splash-bg.dim_1200x800.png) served from frontend/public/assets/generated.",
+      "reason": "No image asset files are present in the diff. SplashScreen page is referenced but no generated image assets at frontend/public/assets/generated are shown as added files.",
+      "evidence": [
+        "frontend/src/App.tsx"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "requirement": "Trend indicator comparing this week vs last week for key metrics.",
+      "reason": "ProgressChart and PersonalBests components are present, but no TrendIndicator component or week-over-week comparison logic is visible in the diff.",
+      "evidence": [
+        "frontend/src/components/analytics/ProgressChart.tsx",
+        "frontend/src/components/analytics/PersonalBests.tsx"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "requirement": "Activity history page showing past sessions grouped by day/week/month.",
+      "reason": "ActivityHistoryPage is referenced in App.tsx but its implementation is not shown in the diff. No grouping-by-period logic is visible.",
+      "evidence": [
+        "frontend/src/App.tsx"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Subscription tier read from localStorage instead of backend",
+      "reason": "The build request requires subscription tier to be stored per user in the backend actor and returned with profile. The implementation reads it from localStorage client-side, which was not requested and violates the stated AC.",
+      "evidence": [
+        "frontend/src/App.tsx"
+      ]
+    },
+    {
+      "description": "Login streak tracked entirely in localStorage",
+      "reason": "The build request implies backend-persistent streak tracking for cross-device sync. The implementation uses only localStorage, which is a client-side-only approach not specified in the requirements.",
+      "evidence": [
+        "frontend/src/components/gamification/LoginStreakBadge.tsx"
+      ]
+    }
+  ],
+  "confidence": 0.45,
+  "changed_files": [
+    "all_files_summary.json",
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/src/App.tsx",
+    "frontend/src/components/analytics/GoalTracker.tsx",
+    "frontend/src/components/analytics/PersonalBests.tsx",
+    "frontend/src/components/analytics/ProgressChart.tsx",
+    "frontend/src/components/auth/LoginButton.tsx",
+    "frontend/src/components/auth/ProfileSetupModal.tsx",
+    "frontend/src/components/coach/HydrationReminder.tsx",
+    "frontend/src/components/coach/MealPlanCard.tsx",
+    "frontend/src/components/coach/WorkoutRoutineCard.tsx",
+    "frontend/src/components/game/TerritoryMapGrid.tsx",
+    "frontend/src/components/game/ZoneLegend.tsx",
+    "frontend/src/components/game/ZoneOwnershipCard.tsx",
+    "frontend/src/components/gamification/DailyChallengeCard.tsx",
+    "frontend/src/components/gamification/LevelProgressBar.tsx",
+    "frontend/src/components/gamification/LoginStreakBadge.tsx",
+    "frontend/src/components/leaderboard/LeaderboardTable.tsx",
+    "frontend/src/components/overlays/LevelUpOverlay.tsx",
+    "frontend/src/components/overlays/XPGainOverlay.tsx",
+    "frontend/src/components/overlays/ZoneCaptureOverlay.tsx",
+    "frontend/src/components/profile/ProfileDashboard.tsx",
+    "frontend/src/components/social/ActivityFeed.tsx",
+    "frontend/src/components/social/ShareActivityButton.tsx",
+    "frontend/src/components/store/StoreItemCard.tsx",
+    "frontend/src/components/store/StripeConfigSetup.tsx",
+    "frontend/src/components/subscription/AdBanner.tsx",
+    "frontend/src/components/subscription/TierBadge.tsx",
+    "frontend/src/components/subscription/UpgradePrompt.tsx",
+    "frontend/src/components/tracking/WorkoutRecorder.tsx",
+    "frontend/src/contexts/FeatureFlagsContext.tsx",
+    "frontend/src/contexts/OverlayContext.tsx",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useCreateCheckoutSession.ts",
+    "frontend/src/hooks/useGetCallerUserProfile.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/index.css",
+    "frontend/src/main.tsx",
+    "frontend/src/pages/AICoach.tsx",
+    "frontend/src/pages/ActivityHistory.tsx",
+    "frontend/src/pages/Admin.tsx",
+    "frontend/src/pages/Analytics.tsx",
+    "frontend/src/pages/Badges.tsx",
+    "frontend/src/pages/Friends.tsx",
+    "frontend/src/pages/Home.tsx",
+    "frontend/src/pages/Inventory.tsx",
+    "frontend/src/pages/Leaderboard.tsx",
+    "frontend/src/pages/PaymentFailure.tsx",
+    "frontend/src/pages/PaymentSuccess.tsx",
+    "frontend/src/pages/Profile.tsx",
+    "frontend/src/pages/SplashScreen.tsx",
+    "frontend/src/pages/Store.tsx",
+    "frontend/src/pages/Subscription.tsx",
+    "frontend/src/pages/Teams.tsx",
+    "frontend/src/pages/TerritoryMap.tsx",
+    "frontend/src/utils/colorAssignment.ts",
+    "frontend/src/utils/gamification.ts",
+    "frontend/src/utils/subscriptionGating.ts",
+    "frontend/src/utils/urlParams.ts",
+    "frontend/tailwind.config.js",
+    "project_state.json"
+  ]
+}

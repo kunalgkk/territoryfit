@@ -1,0 +1,20 @@
+{
+  "frontend/src/App.tsx": "Main application entry point with TanStack Router setup, all route definitions, responsive layout with desktop sidebar and mobile bottom tab bar, authentication flow, profile setup modal, gamification overlays, and ad banner for free tier users.",
+  "frontend/src/pages/SplashScreen.tsx": "Full-screen splash/loading screen displaying the app icon and background image with a loading spinner, shown during initial authentication state determination.",
+  "frontend/src/pages/Home.tsx": "Home page showing today's fitness stats, daily challenge card, inline workout recorder, and recent activity feed; displays a landing screen for unauthenticated users.",
+  "frontend/src/pages/TerritoryMap.tsx": "Territory map page rendering the SVG zone grid with ownership colors, zone legend, selected zone detail card, and how-to-capture instructions.",
+  "frontend/src/pages/ActivityHistory.tsx": "Activity history page grouping workout sessions by day/week/month tabs with aggregate stats per period and activity feed cards.",
+  "frontend/src/pages/Analytics.tsx": "Analytics dashboard with 7/30-day distance and calorie charts, week-over-week trend indicators, daily goal tracker, and personal bests section.",
+  "frontend/src/pages/AICoach.tsx": "AI coaching page showing rule-based workout routines, meal plans, and hydration reminders; gated behind Pro/Elite subscription tier with upgrade prompt.",
+  "frontend/src/pages/Leaderboard.tsx": "Leaderboard page with tabs for territory, distance, and calorie rankings; derives territory rankings from live zone ownership data.",
+  "frontend/src/pages/Badges.tsx": "Badge collection page displaying earned and locked badges in a grid, computed from user workout sessions and zone ownership stats.",
+  "frontend/src/pages/Friends.tsx": "Friends management page with user search, principal ID sharing, and empty state; social features require backend user directory support.",
+  "frontend/src/pages/Teams.tsx": "Teams page for creating/joining teams, gated behind Premium+ subscription; shows upgrade prompt for free users.",
+  "frontend/src/pages/Subscription.tsx": "Subscription management page showing all four tiers (Free/Premium/Pro/Elite) with benefits, pricing, and demo upgrade/downgrade functionality via localStorage.",
+  "frontend/src/pages/Store.tsx": "In-app purchase store listing six virtual items with Stripe checkout integration; shows Stripe config setup for admins.",
+  "frontend/src/pages/Inventory.tsx": "Inventory page displaying purchased items with activation controls and countdown timers for active boosts, stored in localStorage.",
+  "frontend/src/pages/Profile.tsx": "Profile page wrapping the ProfileDashboard component with principal ID display; shows login prompt for unauthenticated users.",
+  "frontend/src/pages/Admin.tsx": "Admin control panel with territory monitor, feature flag toggles, Stripe revenue dashboard, and user list; access-controlled via isCallerAdmin() backend check.",
+  "frontend/src/pages/PaymentSuccess.tsx": "Payment success page with animated checkmark, auto-redirect countdown to inventory, and navigation buttons.",
+  "frontend/src/pages/PaymentFailure.tsx": "Payment failure page with error icon, retry and home navigation buttons."
+}

@@ -1,0 +1,346 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-implement-a-user-authentication-system-supporting-guest-mode-temporary-session-limited-features-internet-identity-login-persistent-account-cross-device-sync-and-a-profile-dashboard-showing-username-avatar-level-xp-and-fitness-stats",
+      "featureTitle": "Implement a user authentication system supporting Guest Mode (temporary session, limited features), Internet Identity login (persistent account, cross-device sync), and a profile dashboard showing username, avatar, level, XP, and fitness stats.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/auth/LoginButton.tsx",
+        "frontend/src/components/auth/ProfileSetupModal.tsx",
+        "frontend/src/components/profile/ProfileDashboard.tsx",
+        "frontend/src/hooks/useGetCallerUserProfile.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-a-fitness-activity-tracking-engine-that-records-manual-workout-sessions-running-walking-jogging-cycling-outdoor-workout-each-session-captures-activity-type-duration-manual-distance-input-calculated-pace-estimated-calorie-burn-based-on-profile-weight-age-activity-type-and-timestamp-store-all-sessions-per-user-in-the-backend",
+      "featureTitle": "Implement a fitness activity tracking engine that records manual workout sessions (running, walking, jogging, cycling, outdoor workout). Each session captures activity type, duration, manual distance input, calculated pace, estimated calorie burn (based on profile weight/age/activity type), and timestamp. Store all sessions per user in the backend.",
+      "files": [
+        "frontend/src/components/tracking/WorkoutRecorder.tsx",
+        "frontend/src/pages/ActivityHistory.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-a-smart-health-analytics-dashboard-that-displays-progress-charts-distance-over-time-calories-over-time-weekly-and-monthly-summaries-personal-bests-goal-tracking-daily-step-distance-goals-and-trend-indicators-showing-improvement-or-decline-compared-to-the-previous-period",
+      "featureTitle": "Build a smart health analytics dashboard that displays progress charts (distance over time, calories over time), weekly and monthly summaries, personal bests, goal tracking (daily step/distance goals), and trend indicators showing improvement or decline compared to the previous period.",
+      "files": [
+        "frontend/src/components/analytics/GoalTracker.tsx",
+        "frontend/src/components/analytics/PersonalBests.tsx",
+        "frontend/src/components/analytics/ProgressChart.tsx",
+        "frontend/src/pages/Analytics.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-create-an-ai-fitness-coaching-panel-that-generates-static-personalized-diet-plans-meal-suggestions-and-workout-routines-based-on-the-user-s-profile-age-weight-goal-and-recent-activity-history-display-these-recommendations-as-pre-generated-text-cards-in-the-ui-note-live-llm-api-calls-are-not-supported-implement-rule-based-or-template-driven-recommendation-logic-in-the-backend",
+      "featureTitle": "Create an AI fitness coaching panel that generates static personalized diet plans, meal suggestions, and workout routines based on the user's profile (age, weight, goal) and recent activity history. Display these recommendations as pre-generated text cards in the UI. Note: Live LLM API calls are not supported; implement rule-based or template-driven recommendation logic in the backend.",
+      "files": [
+        "frontend/src/components/coach/HydrationReminder.tsx",
+        "frontend/src/components/coach/MealPlanCard.tsx",
+        "frontend/src/components/coach/WorkoutRoutineCard.tsx",
+        "frontend/src/pages/AICoach.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-the-territory-based-multiplayer-game-mode-divide-the-virtual-world-into-a-fixed-grid-of-named-territory-zones-users-claim-zones-by-logging-workouts-that-reference-a-zone-selected-from-a-list-or-map-each-zone-tracks-an-ownership-counter-per-user-the-user-with-the-highest-pass-count-owns-the-zone-and-it-displays-in-their-assigned-color-ownership-and-counters-are-stored-in-the-backend",
+      "featureTitle": "Implement the territory-based multiplayer game mode. Divide the virtual world into a fixed grid of named territory zones. Users claim zones by logging workouts that reference a zone (selected from a list or map). Each zone tracks an ownership counter per user; the user with the highest pass count owns the zone and it displays in their assigned color. Ownership and counters are stored in the backend.",
+      "files": [
+        "frontend/src/components/game/ZoneOwnershipCard.tsx",
+        "frontend/src/components/tracking/WorkoutRecorder.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-a-live-territory-map-view-using-an-svg-or-canvas-based-grid-map-no-external-map-sdk-required-render-all-territory-zones-as-colored-cells-show-the-current-user-s-location-zone-highlighted-display-nearby-active-users-those-who-logged-activity-in-the-last-24-hours-and-animate-zone-ownership-changes-with-a-color-fill-transition",
+      "featureTitle": "Implement a live territory map view using an SVG or canvas-based grid map (no external map SDK required). Render all territory zones as colored cells. Show the current user's location zone highlighted, display nearby active users (those who logged activity in the last 24 hours), and animate zone ownership changes with a color-fill transition.",
+      "files": [
+        "frontend/src/components/game/TerritoryMapGrid.tsx",
+        "frontend/src/components/game/ZoneLegend.tsx",
+        "frontend/src/pages/TerritoryMap.tsx",
+        "frontend/src/utils/colorAssignment.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-8"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-global-and-regional-leaderboards-compute-rankings-by-total-territory-zones-owned-total-distance-logged-total-calories-burned-and-total-successful-takeovers-display-leaderboards-with-tabs-for-global-and-filterable-by-a-user-selected-region-tag-store-region-tags-on-user-profiles",
+      "featureTitle": "Build global and regional leaderboards. Compute rankings by: total territory zones owned, total distance logged, total calories burned, and total successful takeovers. Display leaderboards with tabs for Global, and filterable by a user-selected region tag. Store region tags on user profiles.",
+      "files": [
+        "frontend/src/components/leaderboard/LeaderboardTable.tsx",
+        "frontend/src/pages/Leaderboard.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-9"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-a-gamification-and-rewards-system-award-xp-for-each-completed-workout-scaled-by-duration-and-distance-zone-captures-and-successful-takeovers-define-a-level-progression-table-xp-thresholds-per-level-unlock-badges-for-milestones-first-capture-10-zones-owned-100km-total-distance-7-day-streak-etc-track-daily-and-weekly-challenges-with-bonus-xp-rewards",
+      "featureTitle": "Implement a gamification and rewards system. Award XP for each completed workout (scaled by duration and distance), zone captures, and successful takeovers. Define a level progression table (XP thresholds per level). Unlock badges for milestones (first capture, 10 zones owned, 100km total distance, 7-day streak, etc.). Track daily and weekly challenges with bonus XP rewards.",
+      "files": [
+        "frontend/src/components/gamification/DailyChallengeCard.tsx",
+        "frontend/src/components/gamification/LevelProgressBar.tsx",
+        "frontend/src/components/gamification/LoginStreakBadge.tsx",
+        "frontend/src/components/profile/ProfileDashboard.tsx",
+        "frontend/src/pages/Badges.tsx",
+        "frontend/src/utils/gamification.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-10"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-social-and-community-features-a-friends-system-send-accept-friend-requests-view-friend-list-a-public-activity-feed-showing-recent-workouts-and-zone-captures-from-friends-and-team-formation-for-group-territory-battles-where-team-members-zone-passes-are-aggregated",
+      "featureTitle": "Implement social and community features: a friends system (send/accept friend requests, view friend list), a public activity feed showing recent workouts and zone captures from friends, and team formation for group territory battles where team members' zone passes are aggregated.",
+      "files": [
+        "frontend/src/components/social/ActivityFeed.tsx",
+        "frontend/src/components/social/ShareActivityButton.tsx",
+        "frontend/src/pages/Friends.tsx",
+        "frontend/src/pages/Home.tsx",
+        "frontend/src/pages/Teams.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-11"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-a-subscription-tier-system-with-four-tiers-free-ad-supported-basic-features-premium-no-ads-all-core-features-pro-premium-advanced-analytics-ai-coach-elite-pro-territory-power-boost-zone-passes-count-double-store-subscription-tier-per-user-in-the-backend-gate-features-based-on-tier",
+      "featureTitle": "Build a subscription tier system with four tiers: Free (ad-supported, basic features), Premium (no ads, all core features), Pro (Premium + advanced analytics + AI coach), Elite (Pro + territory power boost: zone passes count double). Store subscription tier per user in the backend. Gate features based on tier.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/subscription/AdBanner.tsx",
+        "frontend/src/components/subscription/TierBadge.tsx",
+        "frontend/src/components/subscription/UpgradePrompt.tsx",
+        "frontend/src/pages/AICoach.tsx",
+        "frontend/src/pages/Subscription.tsx",
+        "frontend/src/utils/subscriptionGating.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-12"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-an-in-app-purchase-store-for-virtual-items-territory-boosters-temporary-2x-zone-pass-multiplier-xp-multipliers-2x-xp-for-24-hours-cosmetic-skins-player-color-avatar-themes-and-power-ups-one-time-zone-defense-prevents-takeover-for-12-hours-store-owned-items-and-active-boosts-in-the-backend-use-stripe-for-payment-processing",
+      "featureTitle": "Implement an in-app purchase store for virtual items: Territory Boosters (temporary 2x zone pass multiplier), XP Multipliers (2x XP for 24 hours), Cosmetic Skins (player color/avatar themes), and Power-ups (one-time zone defense: prevents takeover for 12 hours). Store owned items and active boosts in the backend. Use Stripe for payment processing.",
+      "files": [
+        "frontend/src/components/profile/ProfileDashboard.tsx",
+        "frontend/src/components/store/StoreItemCard.tsx",
+        "frontend/src/components/store/StripeConfigSetup.tsx",
+        "frontend/src/hooks/useCreateCheckoutSession.ts",
+        "frontend/src/pages/Inventory.tsx",
+        "frontend/src/pages/PaymentFailure.tsx",
+        "frontend/src/pages/PaymentSuccess.tsx",
+        "frontend/src/pages/Store.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-13"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-an-enterprise-grade-admin-saas-control-panel-accessible-only-to-admin-principals-include-user-management-list-ban-reset-stats-territory-monitoring-view-all-zones-ownership-dispute-counts-subscription-management-view-override-user-tiers-revenue-tracking-total-purchases-subscriptions-feature-flags-enable-disable-ai-coach-team-battles-iap-store-per-toggle-and-xp-level-tuning-controls",
+      "featureTitle": "Build an enterprise-grade Admin & SaaS control panel accessible only to admin principals. Include: user management (list, ban, reset stats), territory monitoring (view all zones, ownership, dispute counts), subscription management (view/override user tiers), revenue tracking (total purchases, subscriptions), feature flags (enable/disable AI coach, team battles, IAP store per toggle), and XP/level tuning controls.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/contexts/FeatureFlagsContext.tsx",
+        "frontend/src/pages/Admin.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-14"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-apply-a-minimalist-black-and-white-visual-theme-across-the-entire-app-with-a-map-first-layout-gamified-overlays-xp-bars-level-badges-zone-capture-animations-and-mobile-first-responsive-design-use-high-contrast-monochrome-as-the-base-palette-with-player-territory-colors-as-the-only-accent-colors-typography-should-be-bold-and-modern-all-interactive-elements-must-have-smooth-transitions-and-micro-animations",
+      "featureTitle": "Apply a minimalist black-and-white visual theme across the entire app with a map-first layout, gamified overlays (XP bars, level badges, zone capture animations), and mobile-first responsive design. Use high-contrast monochrome as the base palette with player territory colors as the only accent colors. Typography should be bold and modern. All interactive elements must have smooth transitions and micro-animations.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/overlays/LevelUpOverlay.tsx",
+        "frontend/src/components/overlays/XPGainOverlay.tsx",
+        "frontend/src/components/overlays/ZoneCaptureOverlay.tsx",
+        "frontend/src/contexts/OverlayContext.tsx",
+        "frontend/src/index.css",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-15"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-generate-a-hero-app-icon-and-a-splash-loading-screen-background-image-for-fitzone-conquest-with-the-black-and-white-minimalist-style-the-icon-should-feature-an-abstract-territory-grid-map-motif-the-splash-background-should-evoke-competitive-movement-and-urban-terrain",
+      "featureTitle": "Generate a hero app icon and a splash/loading screen background image for FitZone Conquest with the black-and-white minimalist style. The icon should feature an abstract territory grid/map motif. The splash background should evoke competitive movement and urban terrain.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/pages/SplashScreen.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "stripe@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-16"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

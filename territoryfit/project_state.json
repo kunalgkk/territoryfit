@@ -1,0 +1,243 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "Territory-based fitness tracking multiplayer game app that converts real-world physical activity (walking, running, jogging, cycling) into competitive gameplay. Players capture and defend virtual territories on a live map using real GPS movement. Combines Strava-style fitness tracking, Pokémon GO location mechanics, and Ingress territory control. Includes AI coaching (multi-LLM), social features, gamification, global leaderboards, full monetization (ads, subscriptions, IAP, multi-gateway payments), and an enterprise admin/SaaS control panel. Mobile-first, minimalist black-and-white UI.",
+  "architectural_notes": [
+    "Microservices architecture: separate services for auth, fitness tracking, territory engine, AI coaching, maps, leaderboards, payments, and admin",
+    "Real-time territory updates via WebSocket streaming; server-side GPS validation to prevent spoofing/cheating",
+    "Multi-LLM support with universal API key switching (OpenAI, Gemini, Claude) and cost optimization/usage tracking",
+    "Territory ownership algorithm: frequency-based pass-through counting with server-side conflict resolution",
+    "Battery optimization: adaptive GPS polling intervals based on activity type and speed",
+    "Anti-cheat: server-side speed validation, GPS trajectory plausibility checks, rate limiting on territory captures",
+    "Subscription feature gating: Free (ads) → Premium (no ads) → Pro (analytics+AI) → Elite (boosted territory power)"
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- Abstract black-and-white territory grid map motif app icon with geometric hexagonal cells and a subtle glow effect (app-icon.dim_256x256.png)\n- Dark cinematic splash screen background with abstract urban grid terrain and motion blur streaks in black, white, and deep charcoal tones (splash-bg.dim_1200x800.png)",
+  "existing_features": [
+    {
+      "id": "feature-implement-a-user-authentication-system-supporting-guest-mode-temporary-session-limited-features-internet-identity-login-persistent-account-cross-device-sync-and-a-profile-dashboard-showing-username-avatar-level-xp-and-fitness-stats",
+      "title": "Implement a user authentication system supporting Guest Mode (temporary session, limited features), Internet Identity login (persistent account, cross-device sync), and a profile dashboard showing username, avatar, level, XP, and fitness stats.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-fitness-activity-tracking-engine-that-records-manual-workout-sessions-running-walking-jogging-cycling-outdoor-workout-each-session-captures-activity-type-duration-manual-distance-input-calculated-pace-estimated-calorie-burn-based-on-profile-weight-age-activity-type-and-timestamp-store-all-sessions-per-user-in-the-backend",
+      "title": "Implement a fitness activity tracking engine that records manual workout sessions (running, walking, jogging, cycling, outdoor workout). Each session captures activity type, duration, manual distance input, calculated pace, estimated calorie burn (based on profile weight/age/activity type), and timestamp. Store all sessions per user in the backend.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-smart-health-analytics-dashboard-that-displays-progress-charts-distance-over-time-calories-over-time-weekly-and-monthly-summaries-personal-bests-goal-tracking-daily-step-distance-goals-and-trend-indicators-showing-improvement-or-decline-compared-to-the-previous-period",
+      "title": "Build a smart health analytics dashboard that displays progress charts (distance over time, calories over time), weekly and monthly summaries, personal bests, goal tracking (daily step/distance goals), and trend indicators showing improvement or decline compared to the previous period.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-an-ai-fitness-coaching-panel-that-generates-static-personalized-diet-plans-meal-suggestions-and-workout-routines-based-on-the-user-s-profile-age-weight-goal-and-recent-activity-history-display-these-recommendations-as-pre-generated-text-cards-in-the-ui-note-live-llm-api-calls-are-not-supported-implement-rule-based-or-template-driven-recommendation-logic-in-the-backend",
+      "title": "Create an AI fitness coaching panel that generates static personalized diet plans, meal suggestions, and workout routines based on the user's profile (age, weight, goal) and recent activity history. Display these recommendations as pre-generated text cards in the UI. Note: Live LLM API calls are not supported; implement rule-based or template-driven recommendation logic in the backend.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-the-territory-based-multiplayer-game-mode-divide-the-virtual-world-into-a-fixed-grid-of-named-territory-zones-users-claim-zones-by-logging-workouts-that-reference-a-zone-selected-from-a-list-or-map-each-zone-tracks-an-ownership-counter-per-user-the-user-with-the-highest-pass-count-owns-the-zone-and-it-displays-in-their-assigned-color-ownership-and-counters-are-stored-in-the-backend",
+      "title": "Implement the territory-based multiplayer game mode. Divide the virtual world into a fixed grid of named territory zones. Users claim zones by logging workouts that reference a zone (selected from a list or map). Each zone tracks an ownership counter per user; the user with the highest pass count owns the zone and it displays in their assigned color. Ownership and counters are stored in the backend.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-live-territory-map-view-using-an-svg-or-canvas-based-grid-map-no-external-map-sdk-required-render-all-territory-zones-as-colored-cells-show-the-current-user-s-location-zone-highlighted-display-nearby-active-users-those-who-logged-activity-in-the-last-24-hours-and-animate-zone-ownership-changes-with-a-color-fill-transition",
+      "title": "Implement a live territory map view using an SVG or canvas-based grid map (no external map SDK required). Render all territory zones as colored cells. Show the current user's location zone highlighted, display nearby active users (those who logged activity in the last 24 hours), and animate zone ownership changes with a color-fill transition.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-global-and-regional-leaderboards-compute-rankings-by-total-territory-zones-owned-total-distance-logged-total-calories-burned-and-total-successful-takeovers-display-leaderboards-with-tabs-for-global-and-filterable-by-a-user-selected-region-tag-store-region-tags-on-user-profiles",
+      "title": "Build global and regional leaderboards. Compute rankings by: total territory zones owned, total distance logged, total calories burned, and total successful takeovers. Display leaderboards with tabs for Global, and filterable by a user-selected region tag. Store region tags on user profiles.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-gamification-and-rewards-system-award-xp-for-each-completed-workout-scaled-by-duration-and-distance-zone-captures-and-successful-takeovers-define-a-level-progression-table-xp-thresholds-per-level-unlock-badges-for-milestones-first-capture-10-zones-owned-100km-total-distance-7-day-streak-etc-track-daily-and-weekly-challenges-with-bonus-xp-rewards",
+      "title": "Implement a gamification and rewards system. Award XP for each completed workout (scaled by duration and distance), zone captures, and successful takeovers. Define a level progression table (XP thresholds per level). Unlock badges for milestones (first capture, 10 zones owned, 100km total distance, 7-day streak, etc.). Track daily and weekly challenges with bonus XP rewards.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-social-and-community-features-a-friends-system-send-accept-friend-requests-view-friend-list-a-public-activity-feed-showing-recent-workouts-and-zone-captures-from-friends-and-team-formation-for-group-territory-battles-where-team-members-zone-passes-are-aggregated",
+      "title": "Implement social and community features: a friends system (send/accept friend requests, view friend list), a public activity feed showing recent workouts and zone captures from friends, and team formation for group territory battles where team members' zone passes are aggregated.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-subscription-tier-system-with-four-tiers-free-ad-supported-basic-features-premium-no-ads-all-core-features-pro-premium-advanced-analytics-ai-coach-elite-pro-territory-power-boost-zone-passes-count-double-store-subscription-tier-per-user-in-the-backend-gate-features-based-on-tier",
+      "title": "Build a subscription tier system with four tiers: Free (ad-supported, basic features), Premium (no ads, all core features), Pro (Premium + advanced analytics + AI coach), Elite (Pro + territory power boost: zone passes count double). Store subscription tier per user in the backend. Gate features based on tier.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-an-in-app-purchase-store-for-virtual-items-territory-boosters-temporary-2x-zone-pass-multiplier-xp-multipliers-2x-xp-for-24-hours-cosmetic-skins-player-color-avatar-themes-and-power-ups-one-time-zone-defense-prevents-takeover-for-12-hours-store-owned-items-and-active-boosts-in-the-backend-use-stripe-for-payment-processing",
+      "title": "Implement an in-app purchase store for virtual items: Territory Boosters (temporary 2x zone pass multiplier), XP Multipliers (2x XP for 24 hours), Cosmetic Skins (player color/avatar themes), and Power-ups (one-time zone defense: prevents takeover for 12 hours). Store owned items and active boosts in the backend. Use Stripe for payment processing.",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-an-enterprise-grade-admin-saas-control-panel-accessible-only-to-admin-principals-include-user-management-list-ban-reset-stats-territory-monitoring-view-all-zones-ownership-dispute-counts-subscription-management-view-override-user-tiers-revenue-tracking-total-purchases-subscriptions-feature-flags-enable-disable-ai-coach-team-battles-iap-store-per-toggle-and-xp-level-tuning-controls",
+      "title": "Build an enterprise-grade Admin & SaaS control panel accessible only to admin principals. Include: user management (list, ban, reset stats), territory monitoring (view all zones, ownership, dispute counts), subscription management (view/override user tiers), revenue tracking (total purchases, subscriptions), feature flags (enable/disable AI coach, team battles, IAP store per toggle), and XP/level tuning controls.",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-minimalist-black-and-white-visual-theme-across-the-entire-app-with-a-map-first-layout-gamified-overlays-xp-bars-level-badges-zone-capture-animations-and-mobile-first-responsive-design-use-high-contrast-monochrome-as-the-base-palette-with-player-territory-colors-as-the-only-accent-colors-typography-should-be-bold-and-modern-all-interactive-elements-must-have-smooth-transitions-and-micro-animations",
+      "title": "Apply a minimalist black-and-white visual theme across the entire app with a map-first layout, gamified overlays (XP bars, level badges, zone capture animations), and mobile-first responsive design. Use high-contrast monochrome as the base palette with player territory colors as the only accent colors. Typography should be bold and modern. All interactive elements must have smooth transitions and micro-animations.",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-generate-a-hero-app-icon-and-a-splash-loading-screen-background-image-for-fitzone-conquest-with-the-black-and-white-minimalist-style-the-icon-should-feature-an-abstract-territory-grid-map-motif-the-splash-background-should-evoke-competitive-movement-and-urban-terrain",
+      "title": "Generate a hero app icon and a splash/loading screen background image for FitZone Conquest with the black-and-white minimalist style. The icon should feature an abstract territory grid/map motif. The splash background should evoke competitive movement and urban terrain.",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "User authentication system (Guest mode, Google OAuth, JWT, profile dashboard)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Fitness activity tracking engine (GPS, steps, pace, calories, heatmaps, reports)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Smart health analytics engine (AI insights, progress charts, goals, predictive analytics)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "AI-based diet & workout recommendation system (multi-LLM: GPT, Gemini, Claude; meal plans, coaching)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "User profile & onboarding (name, age, gender, height, weight, goals; privacy & encryption)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Territory-based multiplayer game mode (real-world GPS zones, player colors, live ownership)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Territory claiming & takeover logic (frequency-based ownership, geo-fencing, conflict resolution)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Live multiplayer map (Google Maps SDK, Mapbox, WebSocket streaming, color overlays, battle animations)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Global & regional leaderboards (global, country, state, city rankings by territory, distance, calories)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Gamification & rewards (XP, levels, badges, achievements, daily/weekly challenges, seasons)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Social & community features (friends, team battles, activity feed, in-app chat, sharing, moderation)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-12",
+      "summary": "Microservices technical architecture (DB schema, cloud scaling, real-time server, data pipeline)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-13",
+      "summary": "Monetization framework (ads: AdMob/Meta/Unity; subscriptions: Free/Premium/Pro/Elite; IAP: boosters/skins)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-14",
+      "summary": "Payment gateway integration (Stripe, Razorpay, PayPal, Google Pay, Apple Pay, UPI, crypto-ready)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-15",
+      "summary": "Admin & SaaS control panel (user mgmt, territory monitor, AI analytics, ad/sub/revenue management, feature flags)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-17",
+      "summary": "Build a user onboarding flow that collects full name, age, gender, height, weight, and primary fitness goal. Store this data securely in the backend and use it to personalize calorie estimates, AI coaching, and game balancing.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-22",
+      "summary": "Build the territory takeover logic in the backend: when a user logs a zone pass, increment their count for that zone. If their count exceeds the current owner's count, transfer ownership to the challenger. Expose query functions to retrieve zone ownership details, contest rankings per zone, and a user's total owned territory count.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "TerritoryFit",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}
