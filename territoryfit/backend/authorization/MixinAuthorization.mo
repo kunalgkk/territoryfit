@@ -1,5 +1,5 @@
 import AccessControl "./access-control";
-import Prim "mo:prim";
+import Prim "mo:prim"; 
 import Runtime "mo:core/Runtime";
  
 mixin(accessControlState : AccessControl.AccessControlState) {
