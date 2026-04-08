@@ -1,7 +1,7 @@
 import Map "mo:core/Map";
 import Principal "mo:core/Principal";
 import Runtime "mo:core/Runtime";
-
+ 
 module {
   public type UserRole = {
     #admin;
