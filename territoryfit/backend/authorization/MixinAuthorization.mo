@@ -1,7 +1,7 @@
 import AccessControl "./access-control";
 import Prim "mo:prim";
 import Runtime "mo:core/Runtime";
-
+ 
 mixin(accessControlState : AccessControl.AccessControlState) {
   // Initialize auth (first caller becomes admin, others become users)
   public shared ({ caller }) func _initializeAccessControlWithSecret(userSecret : Text) : async () {
