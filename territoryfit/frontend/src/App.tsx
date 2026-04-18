@@ -323,3 +323,33 @@ declare module '@tanstack/react-router' {
 export default function App() {
   return <RouterProvider router={router} />;
 }
+
+
+
+import { useEffect, useState } from "react";
+
+function App() {
+  const [theme, setTheme] = useState("light");
+
+  useEffect(() => {
+    const saved = localStorage.getItem("theme") || "light";
+    setTheme(saved);
+    document.documentElement.setAttribute("data-theme", saved);
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
+    document.documentElement.setAttribute("data-theme", newTheme);
+  };
+
+  return (
+    <div>
+      <h1>Territory Fit</h1>
+      <button onClick={toggleTheme}>Toggle Light/Dark</button>
+    </div>
+  );
+}
+
+export default App;
