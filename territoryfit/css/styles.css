@@ -1,15 +1,28 @@
+/* Default (light theme) */
 :root {
   --bg-color: #ffffff;
   --text-color: #000000;
   --primary-color: #4CAF50;
 }
 
+/* Dark theme override */
+:root[data-theme="dark"] {
+  --bg-color: #121212;
+  --text-color: #ffffff;
+  --primary-color: #81C784;
+}
+
+/* Apply globally */
 body {
   background-color: var(--bg-color);
   color: var(--text-color);
 }
 
+/* Buttons */
 button {
   background-color: var(--primary-color);
-  color: white;
+  color: #ffffff;
+  border: none;
+  padding: 10px 16px;
+  cursor: pointer;
 }
